@@ -191,7 +191,7 @@
       mostrarError('error-apellidos', !f.apellidos.value.trim());
       mostrarError('error-dni', !f.dni.value.trim());
 
-     const telefonoValido = /^(\+?\d{1,4})?\d{6,12}$/.test(f.telefono.value.trim());
+     const telefonoValido = /^\+?\d{0,4}\d{6,12}$/.test(f.telefono.value.trim());
       mostrarError('error-telefono', !telefonoValido);
 
       const correoValido = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.correo.value);
