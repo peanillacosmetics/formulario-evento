@@ -140,48 +140,61 @@
     </form>
   </div>
 
-  <script>
-    console.log("✅ Script cargado – formEvento id:", document.getElementById("formEvento"));
+ <script>
+  console.log("✅ Script cargado – formEvento id:", document.getElementById("formEvento"));
 
-    document.getElementById("formEvento").addEventListener("submit", function(e) {
-      e.preventDefault();
+  document.getElementById("formEvento").addEventListener("submit", function(e) {
+    e.preventDefault();
+    console.log("📨 Formulario enviado");
 
-      const nombre = this.nombre.value.trim();
-      const apellidos = this.apellidos.value.trim();
-      const telefono = this.telefono.value.trim();
-      const correo = this.correo.value.trim();
-      const dni = this.dni.value.trim();
-      const entrada = this.entrada.value;
+    const nombre = this.nombre.value.trim();
+    const apellidos = this.apellidos.value.trim();
+    const telefono = this.telefono.value.trim();
+    const correo = this.correo.value.trim();
+    const dni = this.dni.value.trim();
+    const entrada = this.entrada.value;
 
-      const payload = {
-        data: [{
-          Nombre: nombre,
-          Apellidos: apellidos,
-          Telefono: telefono,
-          Correo: correo,
-          DNI: dni,
-          Entrada: entrada
-        }]
-      };
+    console.log("📝 Datos recogidos:", { nombre, apellidos, telefono, correo, dni, entrada });
 
-      fetch("https://sheetdb.io/api/v1/zh8t2fq05nz70", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(res => res.json())
-      .then(() => {
-        const mensaje = `📩 Nueva inscripción:%0A%0ANombre: ${nombre}%0AApellidos: ${apellidos}%0ATeléfono: ${telefono}%0ACorreo: ${correo}%0ADNI: ${dni}%0AEntrada: ${entrada}`;
-        const numeroWhatsApp = "34611052657";
-        window.open(`https://wa.me/${numeroWhatsApp}?text=${mensaje}`, "_blank");
-        alert("✅ Enviado. Se abrirá WhatsApp.");
-        this.reset();
-      })
-      .catch(err => {
-        console.error("❌ Error:", err);
-        alert("Error al enviar formulario.");
-      });
+    const payload = {
+      data: [{
+        Nombre: nombre,
+        Apellidos: apellidos,
+        Telefono: telefono,
+        Correo: correo,
+        DNI: dni,
+        Entrada: entrada
+      }]
+    };
+
+    console.log("📦 Payload preparado:", payload);
+
+    fetch("https://sheetdb.io/api/v1/zh8t2fq05nz70", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(res => {
+      console.log("✅ Respuesta de SheetDB recibida");
+      return res.json();
+    })
+    .then(data => {
+      console.log("📊 SheetDB respuesta JSON:", data);
+      const mensaje = `📩 Nueva inscripción:%0A%0ANombre: ${nombre}%0AApellidos: ${apellidos}%0ATeléfono: ${telefono}%0ACorreo: ${correo}%0ADNI: ${dni}%0AEntrada: ${entrada}`;
+      const numeroWhatsApp = "34611052657";
+      const enlaceWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
+      console.log("📲 Redirigiendo a WhatsApp:", enlaceWhatsApp);
+
+      window.open(enlaceWhatsApp, "_blank");
+      alert("✅ Enviado. Se abrirá WhatsApp.");
+      this.reset();
+    })
+    .catch(err => {
+      console.error("❌ Error al enviar datos:", err);
+      alert("Error al enviar formulario.");
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
